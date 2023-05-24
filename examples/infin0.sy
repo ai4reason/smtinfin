@@ -1,0 +1,12 @@
+;;;;; ==> infin0.smt2 <==
+(set-logic ALL)
+(declare-sort S 0)
+(synth-fun f ((x S)) S)
+
+; f injective
+(constraint (forall ((x S)(y S)) (=> (= (f x) (f y)) (= x y))))
+
+; not surjective
+(constraint (exists ((out S)) (forall ((x S)) (not (= (f x) out)))))
+
+(check-synth)

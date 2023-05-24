@@ -1,0 +1,9 @@
+(set-logic UFLIA)
+(synth-fun f ((x Int)) Int)
+
+(constraint (< 0 (f 0)))
+(constraint (< 5 (f 5)))
+(constraint (< 6 (f 6)))
+(constraint (< 10 (f 10)))
+
+(check-synth)

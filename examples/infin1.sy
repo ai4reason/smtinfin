@@ -1,0 +1,16 @@
+
+;;;;;==> infin1.smt2 <==
+(declare-sort S 0)
+(synth-fun R ((x S) (y S)) Bool)
+
+; R transitive
+(constraint (forall ((x S)(y S)(z S)) (=> (and (R x y) (R y z)) (R x z))))
+
+; R irreflexive
+(constraint (forall ((x S)) (not (R x x))))
+
+; infinite chains
+(synth-fun sk ((x S)) S)
+(constraint (forall ((x S)) (R x (sk x))))
+
+(check-synth)

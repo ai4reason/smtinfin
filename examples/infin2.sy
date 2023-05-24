@@ -1,0 +1,11 @@
+
+;;;;; ==> infin2.smt2 <==
+(set-logic ALL)
+
+(synth-fun f ((x Int)) Int)
+
+; f unlimited
+(synth-fun sk ((x Int)) Int)
+(constraint (forall ((x Int)) (> (f (sk x)) x)))
+
+(check-synth)

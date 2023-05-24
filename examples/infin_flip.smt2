@@ -1,0 +1,5 @@
+(set-logic UFLIA)
+(declare-fun f (Int) Bool)
+(assert (forall ((x Int)) (not (= (f x) (f (- x 1))))))
+(check-sat)
+(get-model)

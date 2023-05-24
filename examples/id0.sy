@@ -1,0 +1,4 @@
+(set-logic UFLIA)
+(synth-fun f ((x Int)) Int)
+(constraint (forall ((x Int)) (< x (f x))))
+(check-synth)

@@ -1,0 +1,21 @@
+(set-logic UFLIA)
+
+(declare-sort S 0)
+(synth-fun a () S)
+(synth-fun b () S)
+(synth-fun c () S)
+
+(constraint (distinct a b c))
+(synth-fun f ((x Int)) S)
+; f(t) is an elevator request in time t, f(t) is the floor
+
+; we assume only 3 distinct floors
+(constraint (forall ((x Int)) (or (= (f x) a) (= (f x) b) (= (f x) c))))
+
+; we ignore repeated requests
+(constraint (forall ((x Int)) (not (= (f x) (f (- x 1))))))
+
+; show that floor zero is never reached (starvation)
+(constraint (forall ((x Int)) (not (= (f x) a))))
+
+(check-synth)
