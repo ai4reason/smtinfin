@@ -1,0 +1,122 @@
+smtinfin -- Copyright (c) 2023- CIIRC (Czech Institute of Informatics, Robotics and Cybernetics) / CTU (Czech Technical University)
+
+Version: 3.1
+
+smtinfin is an open source program that reads an SMT2 problem and tries
+to find interpretations for sorts and functions that make the problem satisfiable.
+It uses calls to cvc5.
+
+* Installation
+
+Make 3 executables:
+
+smtintfuncsynth : Synthesize sorts and functions and check sat with cvc5
+smtintfuncsynthsygus : Synthesize sorts and functions up to one unary f:int -> int and check sat with cvc5(sygus)
+smtintfuncsynthsygusmultifun : Synthesize sorts only and leave cvc5(sygus) to synthesize the functions
+
+sbcl --disable-debugger --load smtintfuncsynthexec.lisp
+sbcl --disable-debugger --load smtintfuncsynthsygusexec.lisp
+sbcl --disable-debugger --load smtintfuncsynthsygusmultifunexec.lisp
+
+* Usage
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/id0.smt2
+sat
+sortinterps:
+NIL
+funcinterps:
+((F LAMBDA (X) (+ C X)))
+elapsed time: 6
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/id1.smt2
+sat
+sortinterps:
+NIL
+funcinterps:
+((F LAMBDA (X) (+ C X)))
+elapsed time: 6
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/id2.smt2
+sat
+sortinterps:
+NIL
+funcinterps:
+((F LAMBDA (X) (+ C X)))
+elapsed time: 6
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/infin0.smt2
+sat
+sortinterps:
+((S . INT))
+funcinterps:
+((F LAMBDA (X) (- C (+ C (DOUBLE X)))))
+elapsed time: 8
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/infin1.smt2
+unknown
+elapsed time: 59
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/infin2.smt2
+sat
+sortinterps:
+NIL
+funcinterps:
+((SK LAMBDA (X) (+ C X)) (F LAMBDA (X) (+ C X)))
+elapsed time: 7
+
+Note that multiple occurrences of C correspond to *different*
+integer constants (e.g., C0 and C1). The SMT solver
+is left to determine the particular values making the
+interpreted problem satisfiable.
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/infin3.smt2
+sat
+sortinterps:
+NIL
+funcinterps:
+((AT2 LAMBDA (X) (EVENP X)) (AT1 LAMBDA (X) (NOT (EVENP X)))
+ (AT0 LAMBDA (|t|) FALSE))
+elapsed time: 16
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/infin4.smt2
+sat
+sortinterps:
+((S . INT))
+funcinterps:
+((F LAMBDA (X) (ITE (EVENP X) C C)))
+elapsed time: 6
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/infin5.smt2
+sat
+sortinterps:
+NIL
+funcinterps:
+((F LAMBDA (X) (+ C X)))
+elapsed time: 7
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/infin_flip.smt2
+sat
+sortinterps:
+NIL
+funcinterps:
+((F LAMBDA (X) (EVENP X)))
+elapsed time: 2
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/infin_pattern.smt2
+sat
+sortinterps:
+NIL
+funcinterps:
+((F LAMBDA (X) (NOT (EVENP (- C (+ C (HALVE (+ C X))))))))
+elapsed time: 1
+
+./smtintfuncsynth -cvc5 `which cvc5` examples/smtlib.1035171simp2.smt2
+sat
+sortinterps:
+NIL
+funcinterps:
+((F17 LAMBDA (X)
+  (ITE (NNEG X) (ITE (EVENP X) (HALVE X) (- C (+ C (HALVE (+ C X))))) C))
+ (F12 LAMBDA (X) (ITE (NNEG X) (DOUBLE X) (- C (+ C (DOUBLE X))))))
+elapsed time: 242
+
